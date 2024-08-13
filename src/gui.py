@@ -54,18 +54,19 @@ class CPU:
         0, # bg
         0  # overflow
         ]
+        sext.delete("1.0", END)
     
     def tick(self):
         self.execc()
         self.counter += 1
-        print(self.counter)
-        print(self.memory)
+        #print(self.counter)
+        #print(self.memory)
         
     def execc(self):
         cmd = '0'*(16-len(bin(int(self.memory[self.counter],16))[2:])) + bin(int(self.memory[self.counter],16))[2:]
-        print(cmd)
+        #print(cmd)
         instr = int(cmd[-5:],2)
-        print(cmd[-5:], instr)
+        #print(cmd[-5:], instr)
         regs = [
             cmd[-8:-5],
             cmd[-11:-8],
@@ -125,7 +126,7 @@ class CPU:
                 if not self.flags[1]: self.counter = int(self.registers[int(regs[0],2)],16)
             case 5:
                 sext.insert(END, self.registers[int(regs[0],2)])
-        print(regs)
+        #print(regs)
 
 CPU_inst = CPU()
 
@@ -182,7 +183,7 @@ root = Tk()
 root.geometry('800x600')
 root.resizable(False, False)
 root.title("EMU ETHER-16")
-CPU.init(CPU_inst)
+
 
 rtext = StringVar()
 rtext.set("ОЖДАНИЕ ПРОГРАММЫ")
@@ -233,6 +234,7 @@ hext.grid(column=1, row=1)
 sext.grid(column=2, row=1)
 vext.grid(column=2, row=2)
 
+CPU.init(CPU_inst)
 # Запуск потока
 thread = threading.Thread(target=worker_thread, args=(hext,sext, rtext))
 thread.start()
