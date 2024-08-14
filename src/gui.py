@@ -1,9 +1,11 @@
 from tkinter import *
 from tkinter import ttk
-from translator import translate, open_file
 import threading
 import time
 from tkinter import StringVar, Label, Tk
+from translator import translate, open_file
+from core import CPU
+
 
 def xor(a, b):
     return (a and not b) or (not a and b)
@@ -15,7 +17,6 @@ def to_hex(n):
         s = sr[n%16]+s
         n = n // 16
     return s
-
 
 class CPU:
     out_reg = 0
@@ -164,6 +165,7 @@ def trs():
 
 def reset_sim():
     CPU.init(CPU_inst)
+    rtext.set(f"IP - {to_hex(CPU_inst.counter)}\n" + "\n".join(CPU_inst.registers) + f"\nFLAGS\n{CPU_inst.flags}")
     print("RESETED")
 
 def start():
@@ -186,7 +188,7 @@ root.title("EMU ETHER-16")
 
 
 rtext = StringVar()
-rtext.set("ОЖДАНИЕ ПРОГРАММЫ")
+rtext.set("ОЖыДАНИЕ ПРОГРАММЫ")
 rlable = Label(root, textvariable=rtext)
 rlable.grid(column=3, row=1)
 
