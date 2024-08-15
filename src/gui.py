@@ -4,7 +4,7 @@ import threading
 import time
 from tkinter import StringVar, Label, Tk
 from translator import translate, open_file
-from core import CPU
+#from core import CPU
 
 
 def xor(a, b):
@@ -55,11 +55,25 @@ class CPU:
         0, # bg
         0  # overflow
         ]
+        self.int_vect = [
+        0 # overflow
+        ]
+        self.intr = [
+        0 # overflow
+        ]
+        self.int_return = 0
+        self.int_type = 0
         sext.delete("1.0", END)
     
     def tick(self):
+        if 1 in self.intr and int_vect[self.intr.index(1)] != 0 and  self.int_return == 0:
+            self.int_type = self.intr.index(1)
+            self.int_return = self.counter
+            self.counter = self.int_vect[self.intr.index(1)]
         self.execc()
         self.counter += 1
+        if self.flags[2]:
+            self.intr[0] = 1
         #print(self.counter)
         #print(self.memory)
         
@@ -118,15 +132,22 @@ class CPU:
             case 8:
                 self.counter = int(self.registers[int(regs[0],2)],16)
             case 9:
-                if self.flags[0]: self.counter = int(self.registers[int(regs[0],2)],16)
+                if self.flags[0]: self.counter = int(self.registers[int(regs[0],2)],16) - 1
             case 10:
-                if not self.flags[0]: self.counter = int(self.registers[int(regs[0],2)],16)
+                if not self.flags[0]: self.counter = int(self.registers[int(regs[0],2)],16) - 1
             case 11:
-                if self.flags[1]: self.counter = int(self.registers[int(regs[0],2)],16)
+                if self.flags[1]: self.counter = int(self.registers[int(regs[0],2)],16) - 1
             case 12:
-                if not self.flags[1]: self.counter = int(self.registers[int(regs[0],2)],16)
+                if not self.flags[1]: self.counter = int(self.registers[int(regs[0],2)],16) - 1
             case 5:
                 sext.insert(END, self.registers[int(regs[0],2)])
+            case 7:
+                if self.int_return == 0:
+                    self.stopped = 1
+                else:
+                    self.counter = self.int_return - 1
+                    self.int_return = 0
+                    self.intr[self.int_type] = 0
         #print(regs)
 
 CPU_inst = CPU()
