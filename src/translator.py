@@ -77,6 +77,7 @@ def translate(lines):
             if "OUTFL" in p_op_code or "INFL" in p_op_code:
                 cmd = "11" + cmd[2:]
             print("cmd:", end=" ")
+            print(cmd)
             print(cmd, "0"*(4-len(to_hex(int(cmd,2)))) + to_hex(int(cmd,2)))
             cmd = "0"*(4-len(to_hex(int(cmd,2)))) + to_hex(int(cmd,2))
             out.append(cmd)

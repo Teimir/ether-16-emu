@@ -140,7 +140,15 @@ class CPU:
             case 12:
                 if not self.flags[1]: self.counter = int(self.registers[int(regs[0],2)],16) - 1
             case 5:
-                sext.insert(END, self.registers[int(regs[0],2)])
+                print(cmd)
+                print(cmd[:2])
+                if cmd[:2] == "00":
+                    sext.insert(END, self.registers[int(regs[0],2)][2:])
+                elif cmd[:2] == "01":
+                    sext.insert(END, self.registers[int(regs[0],2)][:2])
+                elif cmd[:2] == "10":
+                    print("nothing")
+                    #sext.insert(END, self.registers[int(regs[0],2)][:2])    
             case 7:
                 if self.int_return == 0:
                     self.stopped = 1
